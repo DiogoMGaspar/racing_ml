@@ -6,6 +6,10 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Ignore AI models and logs
+models/
+data/
+
 # Ignore IDE files
 .vscode/
 .idea/
