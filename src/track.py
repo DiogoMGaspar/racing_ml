@@ -2,7 +2,7 @@ import pygame
 import numpy as np
 from point import Point
 from math import sin, cos, pi, sqrt
-from constants import WHITE
+from constants import DARK_GREY
 
 class TrackSpline:
     def __init__(self, track_data, show_labels=False):
@@ -11,7 +11,7 @@ class TrackSpline:
         self.points = []
         self.track_width = track_data["track_width"]
         self.resolution = 40
-        self.track_colour = WHITE
+        self.track_colour = DARK_GREY
         self.length = 0
         self.show_labels = show_labels
 
@@ -21,7 +21,7 @@ class TrackSpline:
         for i, waypoint in enumerate(self.waypoints):
             x = waypoint[0]
             y = waypoint[1]
-            point = Point(x, y)
+            point = Point((x, y))
             
             # Optionally add labels
             if self.show_labels:
@@ -61,7 +61,7 @@ class TrackSpline:
 
         return x, y
 
-    def draw_track(self, screen):
+    def draw(self, screen):
         total_points = self.resolution * len(self.points)
 
         for i in range(total_points):
@@ -80,6 +80,7 @@ class TrackSpline:
             start_point = self.get_track_point(i)
             end_point = self.get_track_point(i + 1 if i + 1 < total_points else 0)  # This makes sure we close the loop
             length += self.get_distance(start_point, end_point)
+            length += Point(*start_point).distance_to(Point(*end_point))
 
         self.length = length
         return length
