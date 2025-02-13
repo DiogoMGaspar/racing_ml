@@ -2,7 +2,7 @@ import pygame
 from typing import Callable
 
 class Button:
-    def __init__(self, coords: tuple[int, int], image: str, hovered_image: str, clicked_image: str, action: Callable = None):
+    def __init__(self, coords: tuple[int, int], size: tuple[int, int], image: str, hovered_image: str, clicked_image: str, action: Callable = None):
         # Images
         self.current_image = image
         self.image = image
@@ -10,16 +10,19 @@ class Button:
         self.clicked_image = clicked_image
 
         # Functionality
-        self.rect = pygame.image.load(image).get_rect(topleft=coords)
+        self.size = size
+        self.rect = pygame.Rect(*coords, *size)
         self.action = action
 
         # Status
         self.hovered = False
         self.clicked = False
-
+    
     def draw(self, display: pygame.Surface):
+        "Must draw button every frame"
         current_image = pygame.image.load(self.current_image)
-        display.blit(current_image, self.rect)
+        resized_image = pygame.transform.scale(current_image, self.size)
+        display.blit(resized_image, self.rect)
 
     def check_hover(self):
         mouse_pos = pygame.mouse.get_pos()
@@ -47,8 +50,8 @@ class Button:
             if self.action:
                 self.action()
 
-    def update(self, display: pygame.Surface, event: pygame.event.Event):
-        """Must update the button every frame"""
+    def update(self, event: pygame.event.Event):
+        """Must update the button for every event"""
 
         self.check_hover()
         self.handle_event(event)
@@ -61,5 +64,3 @@ class Button:
 
         else:
             self.current_image = self.image
-
-        self.draw(display)

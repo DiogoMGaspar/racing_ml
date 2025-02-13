@@ -1,6 +1,6 @@
 import pygame
 import numpy as np
-from point import Point
+from features.point import Point
 from math import sin, cos, pi, sqrt
 from constants import DARK_GREY
 
